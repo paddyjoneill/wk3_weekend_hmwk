@@ -74,7 +74,7 @@ class Film
   def self.show_times()
     films = self.all()
       for film in films
-        p "#{film.title} | #{film.show_time}"
+        puts "#{film.title} | #{film.show_time}"
       end
     return
   end
