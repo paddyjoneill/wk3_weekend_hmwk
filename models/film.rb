@@ -84,6 +84,9 @@ class Film
     values = [film.title]
     results = SqlRunner.run(sql, values)
     films = results.map { |film| Film.new(film)  }
+    most_pop = films.max_by { |film| film.tickets_sold }
+    p "#{most_pop.show_time}"
+    return
   end
 
 end
