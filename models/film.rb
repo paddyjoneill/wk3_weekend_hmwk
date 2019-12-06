@@ -7,21 +7,24 @@ require_relative('../db/sql_runner')
 class Film
 
   attr_reader :id
-  attr_accessor :title, :price
+  attr_accessor :title, :price, :show_time, :tickets_sold, :capacity
 
   def initialize(options)
     @id = options['id'].to_i if options['id']
     @title = options['title']
+    @show_time = options['show_time']
     @price = options['price'].to_i
+    @tickets_sold = options['tickets_sold'].to_i
+    @capacity = options['capacity'].to_i
   end
 
   def save()
     sql = "INSERT INTO films (
-    title, price
+    title, price, show_time, tickets_sold, capacity
     ) VALUES (
-    $1, $2
+    $1, $2, $3, $4, $5
     ) RETURNING id"
-    values = [@title, @price]
+    values = [@title, @price, @show_time, @tickets_sold, @capacity]
     @id = SqlRunner.run(sql, values)[0]['id'].to_i
   end
 
@@ -44,12 +47,12 @@ class Film
   end
 
   def update()
-    sql = " UPDATE film SET (
-      title, price
+    sql = " UPDATE films SET (
+      title, price, show_time, tickets_sold, capacity
     ) = (
-      $1, $2
-    ) WHERE id = $3;"
-    values = [@title, @price, @id]
+      $1, $2, $3, $4, $5
+    ) WHERE id = $6;"
+    values = [@title, @price, @show_time, @tickets_sold, @capacity, @id]
     SqlRunner.run(sql, values)
   end
 
@@ -66,6 +69,21 @@ class Film
   def customer_count()
     result = customers()
     return result.length
+  end
+
+  def self.show_times()
+    films = self.all()
+      for film in films
+        p "#{film.title} | #{film.show_time}"
+      end
+    return
+  end
+
+  def Film.most_pop_time(film)
+    sql = "SELECT * FROM films WHERE title = $1"
+    values = [film.title]
+    results = SqlRunner.run(sql, values)
+    films = results.map { |film| Film.new(film)  }
   end
 
 end

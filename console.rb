@@ -24,32 +24,36 @@ customer2.save()
 
 film1 = Film.new({
   'title' => 'Star Wars',
-  'price' => 8
+  'price' => 8,
+  'show_time' => '20:00',
+  'capacity' => 100,
+  'tickets_sold' => 0
   })
 film1.save()
 
 film2 = Film.new({
   'title' => 'Jumanji',
-  'price' => 8
+  'price' => 8,
+  'show_time' => '19:00',
+  'capacity' => 100,
+  'tickets_sold' => 0
   })
 film2.save()
 
-ticket1 = Ticket.new({
-  'customer_id' => customer1.id,
-  'film_id' => film1.id
+film3 = Film.new({
+  'title' => 'Jumanji',
+  'price' => 8,
+  'show_time' => '20:30',
+  'capacity' => 100,
+  'tickets_sold' => 0
   })
+film3.save()
+
+ticket1 = Ticket.sell_ticket(film1, customer1)
+ticket2 = Ticket.sell_ticket(film1, customer2)
+ticket3 = Ticket.sell_ticket(film2, customer1)
 ticket1.save()
-
-ticket2 = Ticket.new({
-  'customer_id' => customer2.id,
-  'film_id' => film1.id
-  })
 ticket2.save()
-
-ticket3 = Ticket.new({
-  'customer_id' => customer1.id,
-  'film_id' => film2.id
-  })
 ticket3.save()
 
 

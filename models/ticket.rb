@@ -53,6 +53,18 @@ class Ticket
     SqlRunner.run(sql, values)
   end
 
-  
+  def self.sell_ticket(film, customer)
+    if customer.can_afford_purchase(film.price) != nil && (film.capacity - film.tickets_sold) > 0
+      customer.take_payment(film.price)
+      customer.update
+      film.tickets_sold += 1
+      film.update
+      ticket = Ticket.new({
+        'customer_id' => customer.id,
+        'film_id' => film.id
+        })
+    end
+    return ticket
+  end
 
 end
